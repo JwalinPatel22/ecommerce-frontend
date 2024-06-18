@@ -3,7 +3,7 @@ import { useParams, useLoaderData, Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-function ProductPage({ deleteProduct }) {
+function ProductPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const product = useLoaderData();
@@ -17,9 +17,14 @@ function ProductPage({ deleteProduct }) {
       return;
     }
 
-    deleteProduct(productId);
-    toast.success("Product Deleted Successfully");
-    navigate("/products");
+    try {
+      await axios.delete(`http://localhost:3000/api/product/${productId}`);
+      toast.success("Product Deleted Successfully");
+      navigate("/products");
+    } catch (error) {
+      console.log("Error deleting product", error);
+      toast.error("Cannot delete product");
+    }
   };
 
   return (

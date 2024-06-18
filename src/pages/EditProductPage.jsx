@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
 import { useParams, useLoaderData, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 //jp
-function EditProductPage() { //{ updateProductSubmit }
+function EditProductPage() {
   const product = useLoaderData();
 
   const [title, setTitle] = useState(product.title);
@@ -24,12 +24,15 @@ function EditProductPage() { //{ updateProductSubmit }
       price,
       qty,
     };
-    // updateProductSubmit(updatedProduct);
-    try{
-      await axios.patch(`http://localhost:3000/api/product/${id}`, updatedProduct);
+
+    try {
+      await axios.patch(
+        `http://localhost:3000/api/product/${id}`,
+        updatedProduct
+      );
       toast.success("Product Updated Successfully");
       return navigate(`/product/${id}`);
-    } catch (error){
+    } catch (error) {
       console.log("Error updating product", error);
       toast.error("Failed to update product");
     }

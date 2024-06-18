@@ -26,24 +26,6 @@ export default function App() {
     return;
   };
 
-  //delete product
-  const deleteProduct = async (id) => {
-    const res = await axios.delete(
-      `http://localhost:3000/api/product/${product._id}`
-    );
-    return;
-  };
-
-  // //update product
-  // const updateProduct = async (product) => {
-  //   const res = await axios.put(`http://localhost:3000/api/product/${product.id}`, product, {
-  //     headers: {
-  //       "Content-type": "application/json",
-  //     },
-  //   });
-  //   return;
-  // };
-
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<MainLayout />}>
@@ -55,16 +37,12 @@ export default function App() {
         />
         <Route
           path="/product/:id"
-          element={<ProductPage deleteProduct={deleteProduct} />}
+          element={<ProductPage />}
           loader={productLoader}
         />
         <Route
           path="/edit-product/:id"
-          element={
-            <EditProductPage
-            //  updateProductSubmit={updateProduct}
-            />
-          }
+          element={<EditProductPage />}
           loader={productLoader}
         />
         <Route path="*" element={<NotFoundPage />} />
