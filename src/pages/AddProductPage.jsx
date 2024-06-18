@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"; 
 
-function AddJobPage({ addJobSubmit }) {
+function AddProductPage() {
   const [title, setTitle] = useState("");
   const [brand, setBrand] = useState("");
   const [description, setDescription] = useState("");
@@ -11,18 +12,23 @@ function AddJobPage({ addJobSubmit }) {
 
   const navigate = useNavigate();
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
-    const newJob = {
+    const newProduct = {
       title,
       brand,
       description,
       price,
       qty,
     };
-    addJobSubmit(newJob);
-    toast.success("Job Listing Created Successfully");
-    return navigate("/jobs");
+    try {
+      await axios.post("http://localhost:3000/api/product", newProduct);
+      toast.success("Product Created Successfully");
+      return navigate("/products");
+    } catch (error) {
+      console.log("Error Creating product", error);
+      toast.error("Failed To create product");
+    }
   };
 
   return (
@@ -30,7 +36,9 @@ function AddJobPage({ addJobSubmit }) {
       <div className="container m-auto max-w-2xl py-24">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <form onSubmit={submitForm}>
-            <h2 className="text-3xl text-center font-semibold mb-6">Add Product</h2>
+            <h2 className="text-3xl text-center font-semibold mb-6">
+              Add Product
+            </h2>
 
             <div className="mb-4">
               <label className="block text-gray-700 font-bold mb-2">
@@ -56,7 +64,7 @@ function AddJobPage({ addJobSubmit }) {
                 id="brand"
                 name="brand"
                 className="border rounded w-full py-2 px-3 mb-2"
-                placeholder="eg. Intel Core i9 14900k"
+                placeholder="Intel"
                 required
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
@@ -127,8 +135,7 @@ function AddJobPage({ addJobSubmit }) {
                 id="img"
                 name="img"
                 className="border rounded w-full py-2 px-3"
-                required
-                accept="image/png, image/gif, image/jpeg"
+                accept="image/*"
               />
             </div>
 
@@ -147,4 +154,4 @@ function AddJobPage({ addJobSubmit }) {
   );
 }
 
-export default AddJobPage;
+export default AddProductPage;
