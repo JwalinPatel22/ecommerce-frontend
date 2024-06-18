@@ -71,6 +71,12 @@ function ProductPage({ deleteProduct }) {
                 <p className="my-2 bg-indigo-100 p-2 font-bold">
                   {product.qty}
                 </p>
+                <button
+                  onClick={() => onDeleteClick(product._id)}
+                  className="bg-green-400 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
+                >
+                  Add To Cart
+                </button>
               </div>
 
               <div className="bg-white p-6 rounded-lg shadow-md mt-6">

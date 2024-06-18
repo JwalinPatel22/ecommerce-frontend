@@ -17,7 +17,7 @@ import axios from "axios";
 export default function App() {
   //Add new job
   const addProduct = async (newProduct) => {
-    const res = await axios.post("/api/product", {
+    const res = await axios.post("http://localhost:3000/api/product", {
       headers: {
         "Content-type": "application/json",
       },
@@ -28,19 +28,21 @@ export default function App() {
 
   //delete product
   const deleteProduct = async (id) => {
-    const res = await axios.delete(`/api/product/${product._id}`);
+    const res = await axios.delete(
+      `http://localhost:3000/api/product/${product._id}`
+    );
     return;
   };
 
-  //update product
-  const updateProduct = async (product) => {
-    const res = await axios.put(`/api/product/${product._id}`, product, {
-      headers: {
-        "Content-type": "application/json",
-      },
-    });
-    return;
-  };
+  // //update product
+  // const updateProduct = async (product) => {
+  //   const res = await axios.put(`http://localhost:3000/api/product/${product.id}`, product, {
+  //     headers: {
+  //       "Content-type": "application/json",
+  //     },
+  //   });
+  //   return;
+  // };
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -58,7 +60,11 @@ export default function App() {
         />
         <Route
           path="/edit-product/:id"
-          element={<EditProductPage updateProductSubmit={updateProduct} />}
+          element={
+            <EditProductPage
+            //  updateProductSubmit={updateProduct}
+            />
+          }
           loader={productLoader}
         />
         <Route path="*" element={<NotFoundPage />} />
