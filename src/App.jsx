@@ -12,6 +12,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import ProductPage, { productLoader } from "./pages/ProductPage";
 import AddProductPage from "./pages/AddProductPage";
 import EditProductPage from "./pages/EditProductPage";
+import CartPage from "./pages/CartPage";
 
 export default function App() {
   const router = createBrowserRouter(
@@ -30,6 +31,7 @@ export default function App() {
           element={<EditProductPage />}
           loader={productLoader}
         />
+        <Route path="/cart" element={<CartPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     )
