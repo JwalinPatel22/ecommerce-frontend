@@ -1,6 +1,7 @@
 import { FaArrowLeft } from "react-icons/fa";
 import { useParams, useLoaderData, Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 
 function ProductPage() {
@@ -8,18 +9,33 @@ function ProductPage() {
   const { id } = useParams();
   const product = useLoaderData();
 
+  const addToCart = async (productId) => {
+    try {
+      const response = await axios.post('http://localhost:3000/api/cart/add', {
+        userId: '667172b7402a5aa71991b574',
+        productId,
+        qty: 1,
+      });
+
+      toast.success('Product added to cart successfully', {autoClose: 1000,});
+      navigate("/cart");
+      console.log('Updated Cart');
+    } catch (error) {
+      console.error('Error adding product to cart:', error);
+      toast.error('Failed to add product to cart');
+    }
+  };
+
   const onDeleteClick = async (productId) => {
     const confirm = window.confirm(
       "Are you sure you want to delete this product listing ?"
     );
-
     if (!confirm) {
       return;
     }
-
     try {
       await axios.delete(`http://localhost:3000/api/product/${productId}`);
-      toast.success("Product Deleted Successfully");
+      toast.success("Product Deleted Successfully", {autoClose: 1000,});
       navigate("/products");
     } catch (error) {
       console.log("Error deleting product", error);
@@ -77,7 +93,7 @@ function ProductPage() {
                   {product.qty}
                 </p>
                 <button
-                  onClick={() => onDeleteClick(product._id)}
+                  onClick={() => addToCart(product._id)}
                   className="bg-green-400 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
                 >
                   Add To Cart

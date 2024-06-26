@@ -1,5 +1,8 @@
 import axios from "axios";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -38,48 +41,44 @@ const CartPage = () => {
       setCartItems((prevItems) =>
         prevItems.filter((item) => item.productId._id !== itemId)
       );
+      toast.success("Product removed", { autoClose: 1000 });
     } catch (error) {
       console.log("Error removing item from cart", error);
     }
   };
 
-  const handleUpdateQuantity = async (itemId, newQty) => {
+  const handleUpdateQuantity = async (itemId, qty) => {
     try {
-      const response = await axios.put(
+      const response = await axios.patch(
         `http://localhost:3000/api/cart/update`,
         {
           userId: "667172b7402a5aa71991b574",
           productId: itemId,
-          qty: newQty,
+          qty,
         }
       );
 
-      if (
-        response.data &&
-        response.data.item &&
-        response.data.item.qty !== undefined
-      ) {
-        const updatedItems = cartItems.map((item) => {
-          if (item.productId._id === itemId) {
-            return { ...item, qty: response.data.item.qty };
-          }
-          return item;
-        });
-
+      if (response.status === 200) {
+        // console.log("Response data:", response.data); // Debug log
+        const updatedItem = response.data;
+        const updatedItems = cartItems.map((item) =>
+          item.productId._id === itemId
+            ? { ...item, qty: updatedItem.qty } // Update the quantity of the specific item
+            : item
+        );
+        // console.log("Updated items: ", updatedItems); //Debug log
+        // console.log("Updated item:", updatedItem); // Debug log
         setCartItems(updatedItems);
-
         const total = updatedItems.reduce(
           (acc, item) => acc + item.productId.price * item.qty,
           0
         );
         setTotalPrice(total);
       } else {
-        console.log("Error: Unexpected response format", response.data);
-        // Handle unexpected response format here, e.g., show an error message to the user
+        console.log("Error updating item quantity:", response.statusText);
       }
     } catch (error) {
       console.log("Error updating item quantity", error);
-      // Handle network errors or other exceptions here
     }
   };
 
@@ -96,7 +95,7 @@ const CartPage = () => {
               className="bg-white rounded-xl shadow-md p-4 flex flex-col lg:flex-row justify-between items-center"
             >
               <div className="flex-1 mb-4 lg:mb-0">
-                <h3 className="text-xl font-bold">{item.productId.title}</h3>
+                <h3 className="text-xl font-bold">{item.productId?.title}</h3>
               </div>
               <div className="flex flex-col lg:flex-row items-center">
                 <div className="flex items-center mb-4 lg:mb-0 lg:mr-4">
@@ -120,7 +119,7 @@ const CartPage = () => {
                   </button>
                 </div>
                 <div className="text-lg font-semibold text-indigo-500">
-                  $ {item.productId.price * item.qty}
+                  $ {item.productId?.price * item.qty}
                 </div>
                 <button
                   className="ml-4 text-red-500 hover:text-red-700"
@@ -136,6 +135,18 @@ const CartPage = () => {
           </div>
         </div>
       )}
+      <Link
+        to={`/products`}
+        className="bg-indigo-500 hover:bg-indigo-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
+      >
+        Browse Products
+      </Link>
+      <Link
+        to={`/checkout`}
+        className="bg-green-500 hover:bg-green-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
+      >
+        Checkout
+      </Link>
     </div>
   );
 };
