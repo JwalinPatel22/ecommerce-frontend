@@ -1,26 +1,33 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthContext } from "../context/AuthContext";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const { user, loading } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/cart/667172b7402a5aa71991b574`
+          `http://localhost:3000/api/cart/667172b7402a5aa71991b574`,
+          {
+            headers: { "x-auth-token": localStorage.getItem("token") },
+          }
         );
         setCartItems(response.data.items);
       } catch (error) {
         console.log("Error fetching cart", error);
       }
     };
-    fetchCart();
-  }, []);
+    if (user) {
+      fetchCart();
+    }
+  }, [user]);
 
   useEffect(() => {
     const calculateTotalPrice = () => {
@@ -37,6 +44,7 @@ const CartPage = () => {
     try {
       await axios.delete(`http://localhost:3000/api/cart/delete`, {
         data: { userId: "667172b7402a5aa71991b574", productId: itemId },
+        headers: { "x-auth-token": localStorage.getItem("token") },
       });
       setCartItems((prevItems) =>
         prevItems.filter((item) => item.productId._id !== itemId)
@@ -55,7 +63,8 @@ const CartPage = () => {
           userId: "667172b7402a5aa71991b574",
           productId: itemId,
           qty,
-        }
+        },
+        { headers: { "x-auth-token": localStorage.getItem("token") } }
       );
 
       if (response.status === 200) {

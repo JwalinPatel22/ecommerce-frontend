@@ -14,6 +14,9 @@ import AddProductPage from "./pages/AddProductPage";
 import EditProductPage from "./pages/EditProductPage";
 import CartPage from "./pages/CartPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import LoginPage from "./pages/LoginPage";
 
 export default function App() {
   const router = createBrowserRouter(
@@ -22,20 +25,28 @@ export default function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="/products" element={<ProductsPage />} />
-          <Route path="/add-product" element={<AddProductPage />} />
+          {/* <Route path="/add-product" element={<AddProductPage />} /> */}
           <Route
             path="/product/:id"
             element={<ProductPage />}
             loader={productLoader}
           />
-          <Route
+          {/* <Route
             path="/edit-product/:id"
             element={<EditProductPage />}
             loader={productLoader}
+          /> */}
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                <CartPage />
+              </ProtectedRoute>
+            }
           />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="*" element={<NotFoundPage />} />
           <Route path="/checkout" element={<OrderSuccessPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </>
     )

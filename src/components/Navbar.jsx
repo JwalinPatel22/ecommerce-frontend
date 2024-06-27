@@ -32,11 +32,14 @@ export default function Navbar() {
                 <NavLink to="/products" className={LinkClass}>
                   Products
                 </NavLink>
-                <NavLink to="/add-product" className={LinkClass}>
+                {/* <NavLink to="/add-product" className={LinkClass}>
                   Add Product
-                </NavLink>
+                </NavLink> */}
                 <NavLink to="/cart" className={LinkClass}>
                   Cart
+                </NavLink>
+                <NavLink to="/login" className={LinkClass}>
+                  Login
                 </NavLink>
               </div>
             </div>
