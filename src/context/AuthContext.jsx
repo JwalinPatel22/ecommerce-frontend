@@ -6,26 +6,27 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(null);
+  const [loginStatus, setLoginStatus] = useState(false);
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("token");
-  };
+//   const logout = () => {
+//     setUser(null);
+//     localStorage.removeItem("token");
+//   };
 
-  const register = async (fname, lname, email, password) => {
-    try {
-      const response = await axios.post("http://localhost:3000/api/register", {
-        fname,
-        lname,
-        email,
-        password,
-      });
-      setUser(response.data.user);
-      localStorage.setItem("token", response.data.token);
-    } catch (error) {
-      console.log("Registeration failed", error);
-    }
-  };
+//   const register = async (fname, lname, email, password) => {
+//     try {
+//       const response = await axios.post("http://localhost:3000/api/register", {
+//         fname,
+//         lname,
+//         email,
+//         password,
+//       });
+//       setUser(response.data.user);
+//       localStorage.setItem("token", response.data.token);
+//     } catch (error) {
+//       console.log("Registeration failed", error);
+//     }
+//   };
 
   //checking if the user is authenticated at the inial loading of page
 //   useEffect(() => {
@@ -50,7 +51,7 @@ const AuthProvider = ({ children }) => {
 //   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, setUser, setLoading }}>
+    <AuthContext.Provider value={{ user, loading, loginStatus, setUser, setLoading, setLoginStatus }}>
       {children}
     </AuthContext.Provider>
   );

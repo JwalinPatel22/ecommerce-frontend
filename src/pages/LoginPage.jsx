@@ -2,13 +2,14 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setUser } = useContext(AuthContext);
+  const { setUser, setLoginStatus } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -19,15 +20,15 @@ const LoginPage = () => {
         password,
       });
       const token = response.data.token;
-      const user = jwtDecode(token).name;
+      const user = jwtDecode(token);
       localStorage.setItem("token", token);
       setUser(user);
-      console.log(token);
-      navigate(`/cart/${jwtDecode(token).id}`);
-      toast.success("Login Successful");
+      setLoginStatus(true);
+      navigate("/");
+      toast.success("Login Successful", { autoClose: 500 });
     } catch (error) {
       console.log("Login Failed", error);
-      toast.error("Login Failed");
+      toast.error("Login Failed", { autoClose: 500 });
     }
   };
 

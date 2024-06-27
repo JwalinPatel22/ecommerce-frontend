@@ -18,18 +18,18 @@ export default function HomeCards() {
               Browse Products
             </Link>
           </Card>
-          <Card bg="bg-violet-100">
+          {/* <Card bg="bg-violet-100">
             <h2 className="text-2xl font-bold">For Sellers</h2>
             <p className="mt-2 mb-4">
               List your products and find the perfect customers
             </p>
             <Link
-              to="/add-job"
+              to="/add-product"
               className="inline-block bg-indigo-500 text-white rounded-lg px-4 py-2 hover:bg-indigo-600"
             >
               Add Products
             </Link>
-          </Card>
+          </Card> */}
         </div>
       </div>
     </section>

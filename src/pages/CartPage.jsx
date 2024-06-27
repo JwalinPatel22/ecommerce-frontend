@@ -8,13 +8,13 @@ import { AuthContext } from "../context/AuthContext";
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const { user, loading } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/cart/667172b7402a5aa71991b574`,
+          `http://localhost:3000/api/cart/${user.id}`,
           {
             headers: { "x-auth-token": localStorage.getItem("token") },
           }
@@ -43,7 +43,7 @@ const CartPage = () => {
   const handleRemoveItem = async (itemId) => {
     try {
       await axios.delete(`http://localhost:3000/api/cart/delete`, {
-        data: { userId: "667172b7402a5aa71991b574", productId: itemId },
+        data: { userId: user.id, productId: itemId },
         headers: { "x-auth-token": localStorage.getItem("token") },
       });
       setCartItems((prevItems) =>
@@ -60,7 +60,7 @@ const CartPage = () => {
       const response = await axios.patch(
         `http://localhost:3000/api/cart/update`,
         {
-          userId: "667172b7402a5aa71991b574",
+          userId: user.id,
           productId: itemId,
           qty,
         },

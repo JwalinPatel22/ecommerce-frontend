@@ -1,47 +1,54 @@
 import { FaArrowLeft } from "react-icons/fa";
 import { useParams, useLoaderData, Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import axiosInstance from "../utils/axiosInstance";
 
 function ProductPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const product = useLoaderData();
+  const { user } = useContext(AuthContext);
 
   const addToCart = async (productId) => {
-    try {
-      const response = await axios.post('http://localhost:3000/api/cart/add', {
-        userId: '667172b7402a5aa71991b574',
-        productId,
-        qty: 1,
-      });
-
-      toast.success('Product added to cart successfully', {autoClose: 1000,});
-      navigate("/cart");
-      console.log('Updated Cart');
-    } catch (error) {
-      console.error('Error adding product to cart:', error);
-      toast.error('Failed to add product to cart');
-    }
-  };
-
-  const onDeleteClick = async (productId) => {
-    const confirm = window.confirm(
-      "Are you sure you want to delete this product listing ?"
-    );
-    if (!confirm) {
+    if (!user) {
+      alert("Please login to add items to your cart.");
       return;
     }
     try {
-      await axios.delete(`http://localhost:3000/api/product/${productId}`);
-      toast.success("Product Deleted Successfully", {autoClose: 1000,});
-      navigate("/products");
+      await axiosInstance.post("/cart/add", {
+        userId: user.id,
+        productId,
+        qty: 1,
+      });
+      toast.success("Product added to cart successfully", { autoClose: 500 });
+      navigate(`/cart`);
+      console.log("Updated Cart");
     } catch (error) {
-      console.log("Error deleting product", error);
-      toast.error("Cannot delete product");
+      console.error("Error adding product to cart:", error);
+      toast.error("Failed to add product to cart");
     }
   };
+
+  // const onDeleteClick = async (productId) => {
+  //   const confirm = window.confirm(
+  //     "Are you sure you want to delete this product listing ?"
+  //   );
+  //   if (!confirm) {
+  //     return;
+  //   }
+  //   try {
+  //     await axios.delete(`http://localhost:3000/api/product/${productId}`);
+  //     toast.success("Product Deleted Successfully", {autoClose: 500,});
+  //     navigate("/products");
+  //   } catch (error) {
+  //     console.log("Error deleting product", error);
+  //     toast.error("Cannot delete product");
+  //   }
+  // };
 
   return (
     <>
@@ -100,7 +107,7 @@ function ProductPage() {
                 </button>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+              {/* <div className="bg-white p-6 rounded-lg shadow-md mt-6">
                 <h3 className="text-xl font-bold mb-6">Manage Product</h3>
                 <Link
                   to={`/edit-product/${product._id}`}
@@ -114,7 +121,7 @@ function ProductPage() {
                 >
                   Delete Product
                 </button>
-              </div>
+              </div> */}
             </aside>
           </div>
         </div>
