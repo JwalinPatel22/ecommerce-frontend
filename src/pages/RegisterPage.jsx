@@ -6,38 +6,49 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-const LoginPage = () => {
+const RegisterPage = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setUser, setLoginStatus } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/api/login", {
+      const response = await axios.post("http://localhost:3000/api/register", {
+        name,
         email,
         password,
       });
       const token = response.data.token;
-      const user = jwtDecode(token);
+      const user = jwtDecode(token).name;
       localStorage.setItem("token", token);
+      console.log(token);
       setUser(user);
-      setLoginStatus(true);
       navigate("/");
-      toast.success("Login Successful", { autoClose: 500 });
+      toast.success("Register Successful", { autoClose: 500 });
     } catch (error) {
-      console.log("Login Failed", error);
-      toast.error("Login Failed", { autoClose: 500 });
-      navigate("/register");
+      console.log("Register Failed", error);
+      toast.error("Register Failed", { autoClose: 500 });
     }
   };
 
   return (
     <div className="container m-auto max-w-2xl py-24">
       <div className="bg-white px-6 py-8 mb-4 shadow-xl rounded-2xl border m-4 md:m-0">
-        <h2 className="text-3xl text-center font-semibold mb-6">Login</h2>
-        <form onSubmit={handleLogin}>
+        <h2 className="text-3xl text-center font-semibold mb-6">Register</h2>
+        <form onSubmit={handleRegister}>
+          <div className="mb-4 ">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Name"
+              className="border rounded-md w-full py-2 px-3 mb-2 shadow-lg"
+              required
+            />
+          </div>
           <div className="mb-4 ">
             <input
               type="email"
@@ -63,7 +74,7 @@ const LoginPage = () => {
               type="submit"
               className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline shadow-lg"
             >
-              Login
+              Register
             </button>
           </div>
         </form>
@@ -72,4 +83,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

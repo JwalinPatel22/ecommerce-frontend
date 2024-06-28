@@ -13,6 +13,7 @@ import ProductPage, { productLoader } from "./pages/ProductPage";
 import CartPage from "./pages/CartPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminProtectedRoute from "./admin/components/AdminProtectedRoute";
@@ -51,6 +52,8 @@ export default function App() {
           />
           <Route path="/checkout" element={<OrderSuccessPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminLoginPage />} />
