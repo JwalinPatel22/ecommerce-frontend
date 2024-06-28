@@ -3,33 +3,26 @@ import { useParams, useLoaderData, Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import axiosInstance from "../utils/axiosInstance";
 
-function ProductPage() {
+function AdminProductPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const product = useLoaderData();
-  const { user } = useContext(AuthContext);
 
-  const addToCart = async (productId) => {
-    if (!user) {
-      alert("Please login to add items to your cart.");
+  const onDeleteClick = async (productId) => {
+    const confirm = window.confirm(
+      "Are you sure you want to delete this product listing ?"
+    );
+    if (!confirm) {
       return;
     }
     try {
-      await axiosInstance.post("/cart/add", {
-        userId: user.id,
-        productId,
-        qty: 1,
-      });
-      toast.success("Product added to cart successfully", { autoClose: 500 });
-      navigate(`/cart`);
-      console.log("Updated Cart");
+      await axios.delete(`http://localhost:3000/admin/delete-product/${productId}`);
+      toast.success("Product Deleted Successfully", {autoClose: 500,});
+      navigate("/admin/products");
     } catch (error) {
-      console.error("Error adding product to cart:", error);
-      toast.error("Failed to add product to cart");
+      console.log("Error deleting product", error);
+      toast.error("Cannot delete product");
     }
   };
 
@@ -38,7 +31,7 @@ function ProductPage() {
       <section>
         <div className="container m-auto py-6 px-6">
           <Link
-            to="/products"
+            to="/admin/products"
             className="text-indigo-500 hover:text-indigo-600 flex items-center"
           >
             <FaArrowLeft className="mr-2" /> Back to Products Page
@@ -82,11 +75,21 @@ function ProductPage() {
                 <p className="my-2 bg-indigo-100 p-2 font-bold">
                   {product.qty}
                 </p>
-                <button
-                  onClick={() => addToCart(product._id)}
-                  className="bg-green-400 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+                <h3 className="text-xl font-bold mb-6">Manage Product</h3>
+                <Link
+                  to={`/admin/edit-product/${product._id}`}
+                  className="bg-indigo-500 hover:bg-indigo-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
                 >
-                  Add To Cart
+                  Edit Product
+                </Link>
+                <button
+                  onClick={() => onDeleteClick(product._id)}
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
+                >
+                  Delete Product
                 </button>
               </div>
             </aside>
@@ -97,10 +100,10 @@ function ProductPage() {
   );
 }
 
-//fetching job with a particular id from database
-const productLoader = async ({ params }) => {
+//fetching products with a particular id from database
+const adminProductLoader = async ({ params }) => {
   const res = await axios.get(`http://localhost:3000/admin/product/${params.id}`);
   return res.data;
 };
 
-export { ProductPage as default, productLoader };
+export { AdminProductPage as default, adminProductLoader };

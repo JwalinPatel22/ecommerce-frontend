@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 export default function HomeCards() {
   return (
     <section className="py-4">
-      <div className="container-xl lg:container m-auto">
+      <div className="container-full lg:container m-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-lg">
           <Card bg="bg-violet-200">
-            <h2 className="text-2xl font-bold">ECommerce WebStore</h2>
+            <h2 className="text-2xl font-bold">Explore Products</h2>
             <p className="mt-2 mb-4">
-              Discover our top products for the ultimate shopping experience
+              Explore our wide range of products for an ultimate shopping
+              experience
             </p>
             <Link
               to="/products"
@@ -18,18 +19,18 @@ export default function HomeCards() {
               Browse Products
             </Link>
           </Card>
-          {/* <Card bg="bg-violet-100">
-            <h2 className="text-2xl font-bold">For Sellers</h2>
+          <Card bg="bg-violet-200">
+            <h2 className="text-2xl font-bold">Cart</h2>
             <p className="mt-2 mb-4">
-              List your products and find the perfect customers
+              View products added in your cart
             </p>
             <Link
-              to="/add-product"
-              className="inline-block bg-indigo-500 text-white rounded-lg px-4 py-2 hover:bg-indigo-600"
+              to="/cart"
+              className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
             >
-              Add Products
+              View Cart
             </Link>
-          </Card> */}
+          </Card>
         </div>
       </div>
     </section>

@@ -10,13 +10,22 @@ import MainLayout from "./layouts/MainLayout";
 import ProductsPage from "./pages/ProductsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProductPage, { productLoader } from "./pages/ProductPage";
-import AddProductPage from "./pages/AddProductPage";
-import EditProductPage from "./pages/EditProductPage";
 import CartPage from "./pages/CartPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
-import { AuthProvider } from "./context/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+import AdminProtectedRoute from "./admin/components/AdminProtectedRoute";
+
+import AdminLoginPage from "./admin/pages/AdminLoginPage";
+import AdminProductPage, {
+  adminProductLoader,
+} from "./admin/pages/AdminProductPage";
+import AdminProductsPage from "./admin/pages/AdminProductsPage";
+import EditProductPage from "./admin/pages/EditProductPage";
+import AdminDashboardPage from "./admin/pages/AdminDashboardPage";
+import AddProductPage from "./admin/pages/AddProductPage";
+import AdminLayout from "./layouts/AdminLayout";
 
 export default function App() {
   const router = createBrowserRouter(
@@ -25,17 +34,13 @@ export default function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="/products" element={<ProductsPage />} />
-          {/* <Route path="/add-product" element={<AddProductPage />} /> */}
+
           <Route
             path="/product/:id"
             element={<ProductPage />}
             loader={productLoader}
           />
-          {/* <Route
-            path="/edit-product/:id"
-            element={<EditProductPage />}
-            loader={productLoader}
-          /> */}
+
           <Route
             path="/cart"
             element={
@@ -46,8 +51,58 @@ export default function App() {
           />
           <Route path="/checkout" element={<OrderSuccessPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="*" element={<NotFoundPage />} />
         </Route>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminLoginPage />} />
+          <Route
+            path="dashboard"
+            element={
+              <AdminProtectedRoute>
+                <AdminDashboardPage />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="add-product"
+            element={
+              <AdminProtectedRoute>
+                <AddProductPage />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="edit-product/:id"
+            element={
+              <AdminProtectedRoute>
+                <EditProductPage />
+              </AdminProtectedRoute>
+            }
+            loader={adminProductLoader}
+          />
+          <Route
+            path="products"
+            element={
+              <AdminProtectedRoute>
+                <AdminProductsPage />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="product/:id"
+            element={
+              <AdminProtectedRoute>
+                <AdminProductPage />
+              </AdminProtectedRoute>
+            }
+            loader={adminProductLoader}
+          />
+          {/* <Route
+            path="orders"
+            element={<OrdersPage />}
+            loader={productLoader}
+          /> */}
+        </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </>
     )
   );
