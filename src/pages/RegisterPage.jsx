@@ -72,7 +72,7 @@ const RegisterPage = () => {
           <div className="mb-4 center">
             <button
               type="submit"
-              className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline shadow-lg"
+              className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded hover:rounded-full w-full focus:outline-none focus:shadow-outline shadow-lg"
             >
               Register
             </button>

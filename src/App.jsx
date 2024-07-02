@@ -26,6 +26,8 @@ import AdminProductsPage from "./admin/pages/AdminProductsPage";
 import EditProductPage from "./admin/pages/EditProductPage";
 import AdminDashboardPage from "./admin/pages/AdminDashboardPage";
 import AddProductPage from "./admin/pages/AddProductPage";
+import AdminOrdersPage from "./admin/pages/AdminOrdersPage";
+import AdminOrderPage, {adminOrderLoader} from "./admin/pages/AdminOrderPage";
 import AdminLayout from "./layouts/AdminLayout";
 
 export default function App() {
@@ -53,7 +55,6 @@ export default function App() {
           <Route path="/checkout" element={<OrderSuccessPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminLoginPage />} />
@@ -99,12 +100,25 @@ export default function App() {
             }
             loader={adminProductLoader}
           />
-          {/* <Route
+          <Route
             path="orders"
-            element={<OrdersPage />}
-            loader={productLoader}
-          /> */}
+            element={
+              <AdminProtectedRoute>
+                <AdminOrdersPage />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="order/:id"
+            element={
+              <AdminProtectedRoute>
+                <AdminOrderPage />
+              </AdminProtectedRoute>
+            }
+            loader={adminOrderLoader}
+          />
         </Route>
+
         <Route path="*" element={<NotFoundPage />} />
       </>
     )

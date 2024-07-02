@@ -44,7 +44,7 @@ const LoginPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
-              className="border rounded-md w-full py-2 px-3 mb-2 shadow-lg"
+              className="border rounded-md hover:rounded-full w-full py-2 px-3 mb-2 shadow-lg hover:shadow-xl"
               required
             />
           </div>
@@ -54,14 +54,14 @@ const LoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
-              className="border rounded-md w-full py-2 px-3 mb-2 shadow-lg"
+              className="border rounded-md hover:rounded-full w-full py-2 px-3 mb-2 shadow-lg hover:shadow-xl"
               required
             />
           </div>
           <div className="mb-4 center">
             <button
               type="submit"
-              className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline shadow-lg"
+              className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded hover:rounded-full w-full focus:outline-none focus:shadow-outline shadow-lg"
             >
               Login
             </button>

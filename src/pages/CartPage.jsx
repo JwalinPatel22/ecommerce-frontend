@@ -55,6 +55,7 @@ const CartPage = () => {
     }
   };
 
+  //to handle quantity updates
   const handleUpdateQuantity = async (itemId, qty) => {
     try {
       const response = await axios.patch(
@@ -88,6 +89,37 @@ const CartPage = () => {
       }
     } catch (error) {
       console.log("Error updating item quantity", error);
+    }
+  };
+
+  //to handle checkout
+  const handleCheckout = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/api/cart/order`,
+        {
+          userId: user.id,
+          items: cartItems,
+          totalAmount: totalPrice,
+        },
+        { headers: { "x-auth-token": localStorage.getItem("token") } }
+      );
+
+      if (response.status === 201) {
+        const newCart = await axios.post("http://localhost:3000/api/cart/clear-cart");
+        toast.success("Order Placed Successfully !", { autoClose: 1000 });
+        setCartItems(newCart.items);
+        const total = newCart.reduce(
+          (acc, item) => acc + item.productId.price * item.qty,
+          0
+        );
+        setTotalPrice(total);
+      } else {
+        toast.error("Failed To Place order", { autoClose: 1000 });
+      }
+    } catch (error) {
+      console.log("Error during checkout", error);
+      toast.error("Failed To Place order", { autoClose: 1000 });
     }
   };
 
@@ -150,12 +182,12 @@ const CartPage = () => {
       >
         Browse Products
       </Link>
-      <Link
-        to={`/checkout`}
+      <button
+        onClick={() => handleCheckout()}
         className="bg-green-500 hover:bg-green-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
       >
         Checkout
-      </Link>
+      </button>
     </div>
   );
 };
