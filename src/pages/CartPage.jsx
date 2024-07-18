@@ -106,14 +106,10 @@ const CartPage = () => {
       );
 
       if (response.status === 201) {
-        const newCart = await axios.post("http://localhost:3000/api/cart/clear-cart");
+        const newCart = await axios.post(`http://localhost:3000/api/cart/clear-cart/${user.id}`);
         toast.success("Order Placed Successfully !", { autoClose: 1000 });
-        setCartItems(newCart.items);
-        const total = newCart.reduce(
-          (acc, item) => acc + item.productId.price * item.qty,
-          0
-        );
-        setTotalPrice(total);
+        setCartItems(0);
+        setTotalPrice(0);
       } else {
         toast.error("Failed To Place order", { autoClose: 1000 });
       }

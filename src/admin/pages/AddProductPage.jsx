@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
 function AddProductPage() {
@@ -23,11 +24,11 @@ function AddProductPage() {
     };
     try {
       await axios.post("http://localhost:3000/admin/create-product", newProduct);
-      toast.success("Product Created Successfully");
+      toast.success("Product Created Successfully", { autoClose: 500 });
       return navigate("/admin/products");
     } catch (error) {
       console.log("Error Creating product", error);
-      toast.error("Failed To create product");
+      toast.error("Failed To create product", { autoClose: 500 });
     }
   };
 
