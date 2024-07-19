@@ -108,7 +108,7 @@ const CartPage = () => {
       if (response.status === 201) {
         const newCart = await axios.post(`http://localhost:3000/api/cart/clear-cart/${user.id}`);
         toast.success("Order Placed Successfully !", { autoClose: 1000 });
-        setCartItems(0);
+        setCartItems([]);
         setTotalPrice(0);
       } else {
         toast.error("Failed To Place order", { autoClose: 1000 });
