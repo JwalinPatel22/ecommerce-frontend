@@ -11,7 +11,12 @@ function AdminOrderListings() {
     const fetchOrders = async () => {
       try {
         const res = await axios.get("http://localhost:3000/admin/orders");
-        setOrders(res.data);
+        const sortedOrders = res.data.sort((a, b) => {
+          if (a.status === "Pending" && b.status !== "Pending") return -1;
+          if (a.status !== "Pending" && b.status === "Pending") return 1;
+          return 0;
+        });
+        setOrders(sortedOrders);
       } catch (error) {
         console.log("Error fetching data", error);
       } finally {
